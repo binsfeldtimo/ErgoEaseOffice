@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ErgoEase Office</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+<!-- HERO SECTION -->
+<section id="heroSection" class="card">
+    <div class="hero-layout">
+
+        <div class="hero-text">
+            <h1>ErgoEase Office</h1>
+            <p>Identify ergonomic risks. Implement targeted solutions. Support healthier work habits.</p>
+
+            <button id="startBtn" class="btn primary hero-start-btn">
+                Start Screening
+            </button>
+        </div>
+
+        <div class="hero-image-wrap">
+            <img src="office_hero.png" alt="Ergonomic workstation illustration" class="hero-image">
+        </div>
+
+    </div>
+</section>
+
+<!-- EQUIPMENT SELECTION BEFORE SCREENING -->
+<section id="equipmentSection" class="card hidden">
+
+    <h2>Before We Begin</h2>
+    <p>
+        Please select any ergonomic equipment you already use.
+        This helps tailor recommendations so you don’t receive suggestions for items you already have.
+    </p>
+
+    <!-- List populated dynamically -->
+    <div id="equipmentList"></div>
+
+    <div class="center mt-20">
+        <button id="continueBtn" class="btn primary">Continue to Screening</button>
+    </div>
+
+</section>
+
+<!-- SCREENING SECTION -->
+<section id="screeningSection" class="card hidden">
+
+    <h2>Ergonomic Screening</h2>
+
+    <!-- PROGRESS BAR -->
+    <div id="progressBarWrap">
+        <div id="progressBarFill"></div>
+    </div>
+
+    <div class="screening-layout">
+
+        <div class="screening-illustration">
+            <img src="screening_question_illustration.png" alt="Ergonomics Illustration">
+        </div>
+
+        <div class="tooltip-side-text" id="tooltipSideText"></div>
+
+    </div>
+
+    <div class="question-box">
+
+        <div class="question-category">
+            <span id="questionCategoryText"></span>
+        </div>
+
+        <div id="questionText" class="question-text"></div>
+
+        <div class="question-count">
+            Question <span id="qNum">1</span> / <span id="qTotal">0</span>
+        </div>
+
+        <!-- MULTI-SELECT EQUIPMENT QUESTION (hidden unless needed) -->
+        <div id="multiSelectBox" class="multi-select hidden">
+            <h4>Select all equipment you currently use:</h4>
+            <div id="multiSelectOptions"></div>
+
+            <button id="multiSelectNextBtn" class="btn primary" style="margin-top:18px;">
+                Continue
+            </button>
+        </div>
+
+    </div>
+
+    <div class="center mt-20">
+        <button id="yesBtn" class="btn screen-btn">Yes</button>
+        <button id="noBtn" class="btn screen-btn">No</button>
+    </div>
+
+</section>
+<!-- PHOTO + NEXT STEPS -->
+<section id="photoStep" class="card hidden">
+
+  <h2 class="section-title">
+    Optional: Add a Workstation Photo
+  </h2>
+
+  <p class="section-subtitle">
+    This helps improve the accuracy of your ergonomic recommendations.
+  </p>
+
+  <ul class="helper-list">
+    <li>Optional</li>
+    <li>Used only for your personal report</li>
+    <li>Not shared publicly</li>
+  </ul>
+
+  <div class="helper-card">
+    <h3>What happens next</h3>
+    <ul>
+      <li>Your ergonomic score and recommendations will be generated</li>
+      <li>You’ll be taken to your results page</li>
+      <li><strong>Your report is not saved automatically</strong></li>
+    </ul>
+
+    <h3>How to save your report</h3>
+    <ol>
+      <li>Review your results</li>
+      <li>Click <strong>Save Report</strong></li>
+      <li>Enter your name, employer (if applicable), and e-mail</li>
+      <li>Your report will be saved and sent to you by email once available</li>
+    </ol>
+  </div>
+
+  <div class="photo-upload">
+    <label for="photoUpload">
+      <strong>Optional photo upload</strong>
+    </label>
+    <input type="file" id="photoUpload" accept="image/*" />
+    <img id="photoPreview" class="hidden preview-img" alt="Photo preview" />
+  </div>
+
+<div class="helper-card photo-tips">
+ <h3>Photo tips (optional)</h3>
+  <ul>
+    <li>📐 A side or angled view of your workstation works best</li>
+    <li>💺 Try to include your chair, desk, and screen if possible</li>
+    <li>👀 Make sure your monitor and keyboard are visible</li>
+    <li>🚫 No need to include your face</li>
+  </ul>
+</div>
+
+<p class="section-subtitle">
+  Don’t have a photo right now? You can skip this step.
+</p>
+
+  <button id="generateReportBtn" class="btn primary">
+    Generate My Ergonomic Report
+  </button>
+
+</section>
+
+<!-- RESULTS SECTION -->
+<section id="resultsSection" class="card hidden">
+
+    <div class="results-illustration">
+        <img src="results_illustration.png" alt="Ergonomic Results Illustration">
+    </div>
+
+    <h2>Ergonomic Risk Summary</h2>
+
+    <div id="ownsEquipmentBadge" class="equip-badge hidden"></div>
+
+    <!-- GAUGE -->
+    <div class="gauge-wrap">
+        <svg width="360" height="180">
+            <path d="M20 160 A140 140 0 0 1 340 160"
+                  stroke="#ddd" stroke-width="22" fill="none"/>
+
+            <path id="gaugeFill"
+                  d="M20 160 A140 140 0 0 1 340 160"
+                  stroke="#1e90ff" stroke-width="22" fill="none"
+                  stroke-dasharray="0 314"/>
+
+            <circle id="gaugePtr" cx="20" cy="160" r="8" fill="#333"/>
+        </svg>
+    </div>
+
+    <div id="scoreText" class="score-number">0%</div>
+    <div id="scoreLabel" class="score-status">Risk Level</div>
+<div class="risk-helper">Higher score = higher ergonomic risk</div>
+
+
+    <!-- CATEGORY BREAKDOWN -->
+    <h3>Category Breakdown</h3>
+    <div id="breakdownContainer"></div>
+
+    <!-- STRENGTHS -->
+    <h3>Strengths</h3>
+    <ul id="strengthList"></ul>
+
+    <!-- NEEDS -->
+    <h3>Areas Needing Attention</h3>
+    <ul id="needsList"></ul>
+
+    <!-- TOP 3 DEVICES -->
+<div id="noDevicesMsg" class="equip-badge hidden">
+  Based on your responses, you already have equipment in place to address your highest-risk areas.
+  Focus on proper setup, consistent use, and healthy work habits.
+</div>
+    <h3>Top 3 Recommended Devices</h3>
+    <div id="topRecsContainer"></div>
+
+    <!-- COST ESTIMATE -->
+    <div id="estCostText" class="est-cost">Estimated Cost: $0</div>
+
+    <!-- ALL DEVICES -->
+    <button id="toggleAllBtn" class="btn tertiary mt-20">
+        Show All Device Options ▼
+    </button>
+
+    <div id="allDevicesWrapper" class="hidden">
+        <h3>All Recommended Devices</h3>
+        <div id="allDevicesContainer" class="device-grid"></div>
+    </div>
+
+    <!-- ACTION BAR -->
+    <section id="actionBar" class="action-bar hidden">
+<button id="saveReportBtn" class="btn primary">Save Report</button>
+        <button id="csvBtn" class="btn secondary small">Export CSV</button>
+        <button id="viewLogBtn" class="btn secondary small">View Log</button>
+        <button id="retakeBtn" class="btn secondary small">Retake</button>
+    </section>
+
+</section>
+
+<!-- SAVE MODAL -->
+<div id="saveModal" class="modal hidden">
+  <div class="modal-box">
+    <h2>Save Report</h2>
+
+    <label>Employee Name</label>
+    <input id="employeeName" class="input">
+
+    <label>Employer / Company</label>
+    <input
+      id="employerName"
+      class="input"
+      placeholder="Company or Organization"
+    >
+
+    <small class="field-hint">
+      Company reports are generated only if an employer is provided.
+    </small>
+
+    <label>Email Address</label>
+    <input
+      id="employeeEmail"
+      class="input"
+      type="email"
+      placeholder="name@example.com"
+      required
+    >
+
+    <label>Evaluator Name (Optional)</label>
+    <input id="evaluatorName" class="input">
+
+    <label>Notes</label>
+    <textarea id="reportNotes" class="textarea"></textarea>
+
+    <!-- ✅ BUTTONS (THIS IS WHAT WAS MISSING) -->
+    <div class="modal-actions">
+      <button id="confirmSaveBtn" class="btn primary">
+        Save Report
+      </button>
+      <button id="cancelSaveBtn" class="btn secondary">
+        Cancel
+      </button>
+    </div>
+  </div>
+</div>
+
+
+<!-- LOG VIEW -->
+<section id="logView" class="card hidden">
+    <h2>Saved Reports Log</h2>
+
+    <table class="log-table">
+        <thead>
+            <tr>
+                <th>When</th>
+                <th>EmployeeName</th>
+                <th>Discipline</th>
+                <th>Score</th>
+                <th>Status</th>
+                <th>Safe Items</th>
+                <th>Flagged Items</th>
+                <th># Devices</th>
+                <th>Top Devices</th>
+                <th>Cost</th>
+                <th>Rec Titles</th>
+                <th>Evaluator Notes</th>
+<th>Photo</th>
+            </tr>
+        </thead>
+        <tbody id="logTableBody"></tbody>
+    </table>
+
+    <button id="backBtn" class="btn secondary mt-20">Back</button>
+    <button id="clearLogBtn" class="btn danger mt-10">Clear Log</button>
+</section>
+
+
+<script src="app.js"></script>
+</body>
+</html>
